@@ -3,23 +3,17 @@ import java.io.InputStreamReader;
 
 
 %public
-%class pathfilename
+%class JSONLex
 %integer
 %unicode
 %line
+%ignorecase
 
 
 %{
 
 public static int IDENT		= 257;
 public static int NUM			= 258;
-
-public static int IF 			= 259; 
-public static int ELSE 		= 260;
-public static int PUBLIC 	= 261;
-public static int PRIVATE = 262;
-public static int CLASS		= 263;
-public static int EQUALS	= 264;
 
 
 /**
@@ -32,11 +26,11 @@ public static int EQUALS	= 264;
    *               the scanner on.
    */
   public static void main(String argv[]) {
-    pathfilename scanner;
+    JSONLex scanner;
     if (argv.length == 0) {
       try {        
-          // scanner = new pathfilename( System.in );
-          scanner = new pathfilename( new InputStreamReader(System.in) );
+          // scanner = new JSONLex( System.in );
+          scanner = new JSONLex( new InputStreamReader(System.in) );
           while ( !scanner.zzAtEOF ) 
 	        System.out.println("token: "+scanner.yylex()+"\t<"+scanner.yytext()+">");
         }
@@ -50,7 +44,7 @@ public static int EQUALS	= 264;
       for (int i = 0; i < argv.length; i++) {
         scanner = null;
         try {
-          scanner = new pathfilename( new java.io.FileReader(argv[i]) );
+          scanner = new JSONLex( new java.io.FileReader(argv[i]) );
           while ( !scanner.zzAtEOF ) 	
                 System.out.println("token: "+scanner.yylex()+"\t<"+scanner.yytext()+">");
         }
@@ -72,12 +66,24 @@ public static int EQUALS	= 264;
 
 %}
 
-DIGIT = [:digit:]
-LETTER = [:letter:]
-ID = {DIGIT}|{LETTER}|\_
+WHITESPACE=	[ \t]
+LineTerminator = \r|\n|\r\n    
 
 
 %%
 
-({LETTER}\:)?(\\)?(({ID}|{ID}*)+\\)*{ID}|{ID}*(\.({ID}|{ID}*)? {System.out.println("Aceitou!! "+yytext());}
-[^]   {}
+\"[^\"]*\"  {return IDENT;}
+\'[^\']*\'  {return IDENT;}
+[:digit:]+(\.[:digit:]+)?     {return NUM;}
+
+
+":" |
+"{" |
+"}" |
+"," |
+"[" |
+"]"                         {return yytext().charAt(0);}
+
+{WHITESPACE}+               { }
+{LineTerminator}		{}
+.          {System.out.println(yyline+1 + ": caracter invalido: "+yytext());}
