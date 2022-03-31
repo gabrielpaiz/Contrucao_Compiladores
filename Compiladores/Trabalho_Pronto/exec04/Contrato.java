@@ -33,7 +33,7 @@ public class Contrato {
   private static final int [] ZZ_CMAP_TOP = zzUnpackcmap_top();
 
   private static final String ZZ_CMAP_TOP_PACKED_0 =
-    "\1\0\37\u0100\1\u0200\267\u0100\10\u0300\u1020\u0100";
+    "\1\0\1\u0100\36\u0200\1\u0300\267\u0200\10\u0400\u1020\u0200";
 
   private static int [] zzUnpackcmap_top() {
     int [] result = new int[4352];
@@ -62,12 +62,16 @@ public class Contrato {
 
   private static final String ZZ_CMAP_BLOCKS_PACKED_0 =
     "\11\0\1\1\1\2\2\3\1\4\22\0\1\1\2\0"+
-    "\1\5\41\0\1\6\7\0\1\7\1\10\1\11\25\0"+
-    "\1\6\7\0\1\7\1\10\1\11\25\0\1\3\u01a2\0"+
-    "\2\3\326\0\u0100\3";
+    "\1\5\35\0\1\6\1\0\1\7\1\10\1\11\4\0"+
+    "\1\12\1\0\1\13\1\14\1\15\1\16\1\17\1\0"+
+    "\1\20\1\21\1\22\1\23\1\24\12\0\1\6\1\0"+
+    "\1\7\1\10\1\11\4\0\1\12\1\0\1\13\1\14"+
+    "\1\15\1\16\1\17\1\0\1\20\1\21\1\22\1\23"+
+    "\1\24\16\0\1\3\371\0\1\21\u01a8\0\2\3\326\0"+
+    "\u0100\3";
 
   private static int [] zzUnpackcmap_blocks() {
-    int [] result = new int[1024];
+    int [] result = new int[1280];
     int offset = 0;
     offset = zzUnpackcmap_blocks(ZZ_CMAP_BLOCKS_PACKED_0, offset, result);
     return result;
@@ -91,10 +95,11 @@ public class Contrato {
   private static final int [] ZZ_ACTION = zzUnpackAction();
 
   private static final String ZZ_ACTION_PACKED_0 =
-    "\1\0\4\1\4\0\1\2";
+    "\1\0\4\1\30\0\1\2\3\0\1\3\2\0\1\4"+
+    "\1\5\1\0";
 
   private static int [] zzUnpackAction() {
-    int [] result = new int[10];
+    int [] result = new int[39];
     int offset = 0;
     offset = zzUnpackAction(ZZ_ACTION_PACKED_0, offset, result);
     return result;
@@ -119,11 +124,14 @@ public class Contrato {
   private static final int [] ZZ_ROWMAP = zzUnpackRowMap();
 
   private static final String ZZ_ROWMAP_PACKED_0 =
-    "\0\0\0\12\0\24\0\36\0\50\0\62\0\74\0\106"+
-    "\0\120\0\12";
+    "\0\0\0\25\0\52\0\77\0\124\0\151\0\176\0\223"+
+    "\0\250\0\275\0\322\0\347\0\374\0\u0111\0\u0126\0\u013b"+
+    "\0\u0150\0\u0165\0\u017a\0\u018f\0\u01a4\0\u01b9\0\u01ce\0\u01e3"+
+    "\0\u01f8\0\u020d\0\u0222\0\u0237\0\u024c\0\25\0\u0261\0\u0276"+
+    "\0\u028b\0\25\0\u02a0\0\u02b5\0\25\0\25\0\u02ca";
 
   private static int [] zzUnpackRowMap() {
-    int [] result = new int[10];
+    int [] result = new int[39];
     int offset = 0;
     offset = zzUnpackRowMap(ZZ_ROWMAP_PACKED_0, offset, result);
     return result;
@@ -146,12 +154,20 @@ public class Contrato {
   private static final int [] ZZ_TRANS = zzUnpackTrans();
 
   private static final String ZZ_TRANS_PACKED_0 =
-    "\1\2\1\3\1\2\1\0\1\4\1\5\4\2\13\0"+
-    "\1\3\12\0\1\2\17\0\1\6\12\0\1\7\7\0"+
-    "\1\10\10\0\1\11\10\0\1\12\4\0";
+    "\1\2\1\3\1\2\1\0\1\4\1\5\17\2\26\0"+
+    "\1\3\25\0\1\2\32\0\1\6\1\0\1\7\2\0"+
+    "\1\10\1\0\1\11\4\0\1\12\6\0\1\13\41\0"+
+    "\1\14\17\0\1\15\4\0\1\16\7\0\1\17\24\0"+
+    "\1\20\40\0\1\21\22\0\1\22\20\0\1\23\24\0"+
+    "\1\24\30\0\1\25\17\0\1\26\17\0\1\27\34\0"+
+    "\1\30\17\0\1\31\24\0\1\32\22\0\1\33\33\0"+
+    "\1\34\13\0\1\2\40\0\1\35\10\0\1\36\37\0"+
+    "\1\37\15\0\1\40\33\0\1\41\11\0\1\42\35\0"+
+    "\1\43\21\0\1\44\16\0\1\45\24\0\1\46\25\0"+
+    "\1\47\37\0\1\43\3\0";
 
   private static int [] zzUnpackTrans() {
-    int [] result = new int[90];
+    int [] result = new int[735];
     int offset = 0;
     offset = zzUnpackTrans(ZZ_TRANS_PACKED_0, offset, result);
     return result;
@@ -194,10 +210,11 @@ public class Contrato {
   private static final int [] ZZ_ATTRIBUTE = zzUnpackAttribute();
 
   private static final String ZZ_ATTRIBUTE_PACKED_0 =
-    "\1\0\1\11\3\1\4\0\1\11";
+    "\1\0\1\11\3\1\30\0\1\11\3\0\1\11\2\0"+
+    "\2\11\1\0";
 
   private static int [] zzUnpackAttribute() {
-    int [] result = new int[10];
+    int [] result = new int[39];
     int offset = 0;
     offset = zzUnpackAttribute(ZZ_ATTRIBUTE_PACKED_0, offset, result);
     return result;
@@ -728,12 +745,27 @@ public static float JUROS       = 0.03f;
             { System.out.print(yytext());
             }
             // fall through
-          case 3: break;
+          case 6: break;
           case 2:
             { System.out.print(NOME);
             }
             // fall through
-          case 4: break;
+          case 7: break;
+          case 3:
+            { System.out.print(JUROS);
+            }
+            // fall through
+          case 8: break;
+          case 4:
+            { System.out.print(VALOR);
+            }
+            // fall through
+          case 9: break;
+          case 5:
+            { System.out.print(NUM_PARCELAS);
+            }
+            // fall through
+          case 10: break;
           default:
             zzScanError(ZZ_NO_MATCH);
         }

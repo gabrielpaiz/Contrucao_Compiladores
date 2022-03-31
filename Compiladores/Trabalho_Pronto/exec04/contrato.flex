@@ -77,12 +77,12 @@ LineTerminator = \r|\n|\r\n
 
 %%
 
-// "#data#" {System.out.print(yytext());}
+"#data#" {System.out.print(yytext());}
 "#nome#" {System.out.print(NOME);}
-// "#valor#" {System.out.print(yytext());}
-// "#numero#" {System.out.print(yytext());}
-// "#juros#" {System.out.print(yytext());}
-// // "#parcelas#" {System.out.print(yytext());}
+"#valor#" {System.out.print(VALOR);}
+"#numero#" {System.out.print(NUM_PARCELAS);}
+"#juros#" {System.out.print(JUROS);}
+"#parcelas#" {System.out.print(NUM_PARCELAS);}
 
 
 {WHITESPACE}+               {System.out.print(yytext());}
