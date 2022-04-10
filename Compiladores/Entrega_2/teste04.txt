@@ -1,10 +1,12 @@
 $TRACE_ON
 
-
-    { while (b) 
-         if (c)
-            a= 34;
-         fi   
-    }
+   int b;
+   int a;
+   double c;
+   { while (b){
+         if (c) {a = 34;}
+         b = (((a+7)*b)/2);
+      }
+   }
    
 

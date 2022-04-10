@@ -5,11 +5,11 @@ from numpy import append
 
 class knn:
     n = 1
-    conj_dados = []
+    conj_treino = []
 
     def __init__(self, n, list_data) -> None:
         self.n = n
-        self.conj_dados = list_data
+        self.conj_treino = list_data
 
     def dist_euclidiana(self, conj_x, conj_y) -> float:
         ret = 0.0
@@ -20,10 +20,10 @@ class knn:
 
     def n_proximos(self, conj_y) -> list:
         ls_proximos = []
-        ls_proximos.append((0,self.dist_euclidiana(self.conj_dados[0], conj_y)))
+        ls_proximos.append((0,self.dist_euclidiana(self.conj_treino[0], conj_y)))
 
-        for i in range(1,len(self.conj_dados)):
-            dist = self.dist_euclidiana(self.conj_dados[i], conj_y)
+        for i in range(1,len(self.conj_treino)):
+            dist = self.dist_euclidiana(self.conj_treino[i], conj_y)
             for j in range(len(ls_proximos)):
                 if dist < ls_proximos[j][1]:
                     ls_proximos.insert(j, (i, dist))
@@ -33,7 +33,7 @@ class knn:
             
         result = []
         for set in ls_proximos:
-            result.append(self.conj_dados[set[0]])
+            result.append(self.conj_treino[set[0]])
 
         return result
 

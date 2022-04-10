@@ -11,7 +11,13 @@ public class AsdrSample {
    public static final int FI = 305;
    public static final int ELSE = 306;
    public static final int INT = 307;
-   public static final int DOUBLE = 307;
+   public static final int DOUBLE = 308;
+   public static final int AND = 309;
+   public static final int OR = 310;
+   public static final int EQUALS = 311;
+
+
+
 
    public static final String tokenList[] = { "IDENT",
          "NUM",
@@ -20,7 +26,10 @@ public class AsdrSample {
          "FI",
          "ELSE",
          "INT",
-         "DOUBLE" };
+         "DOUBLE",
+         "AND",
+         "OR", 
+         "EQUALS" };
 
    /* referencia ao objeto Scanner gerado pelo JFLEX */
    private Yylex lexer;
@@ -84,17 +93,20 @@ public class AsdrSample {
     * | ident = E ;
     * | if ( E ) Cmd RestoIf // 'fatorada à esquerda'
     * 
-    * RestoIf --> fi
-    * | else Cmd fi
+    * RestoIf --> else Cmd | vazio 
     * 
-    
+   
     
     E --> E > E | E < E | E == E    //   |   não associativo
       | E+E | E-E | E OR E          //   |   assoc a esquerda
       | E*E | E/E | E AND E         //   \/  maior precedencia, assoc a esqu
       | ident | num | (E)           // casos base 
 
-
+    E -> indetX | numX| (E)X
+    X -> <E| >E | ==E| -E | +E
+         |OR E | *E | /E |AND E 
+         | vazio
+    
     ***/
 
 
@@ -222,34 +234,72 @@ public class AsdrSample {
             System.out.println("RestoIF --> else Cmd FI ");
          verifica(ELSE);
          Cmd();
-         verifica(FI);
-
-      } else if (laToken == FI) {
-         if (debug)
-            System.out.println("RestoIF -->  FI  ");
-         verifica(FI);
-      } else
-         yyerror("Esperado else ou fi");
+      }
    }
+   
+//    E --> E > E | E < E | E == E    //   |   não associativo
+//    | E+E | E-E | E OR E          //   |   assoc a esquerda
+//    | E*E | E/E | E AND E         //   \/  maior precedencia, assoc a esqu
+//    | ident | num | (E)           // casos base 
 
+//  E -> indetX | numX| (E)X
+//  X -> <E| >E | ==E| -E | +E
+//       |OR E | *E | /E |AND E 
+//       | vazio
    private void E() {
       if (laToken == IDENT) {
          if (debug)
             System.out.println("E --> IDENT");
          verifica(IDENT);
+         X();
       } else if (laToken == NUM) {
          if (debug)
             System.out.println("E --> NUM");
          verifica(NUM);
+         X();
       } else if (laToken == '(') {
          if (debug)
             System.out.println("E --> ( E )");
          verifica('(');
          E();
          verifica(')');
+         X();
       } else
          yyerror("Esperado operando (, identificador ou numero");
    }
+
+   private void X() {
+      if (laToken == '<'){
+         verifica('<');
+         E();
+      }else if (laToken == '>'){
+         verifica('>');
+         E();
+      }else if (laToken == EQUALS){
+         verifica(EQUALS);
+         E();
+      }else if (laToken == '-'){
+         verifica('-');
+         E();
+      }else if (laToken == '+'){
+         verifica('+');
+         E();
+      }else if (laToken == '*'){
+         verifica('*');
+         E();
+      }else if (laToken == '/'){
+         verifica('/');
+         E();
+      }else if (laToken == AND){
+         verifica(AND);
+         E();
+      }else if (laToken == OR){
+         verifica(OR);
+         E();
+      }
+   }
+
+
 
    private void verifica(int expected) {
       if (laToken == expected)

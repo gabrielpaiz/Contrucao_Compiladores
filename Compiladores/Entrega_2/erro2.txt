@@ -1,13 +1,19 @@
 $TRACE_ON
-
-    { while (b) 
+    int a;
+    int b;
+    { while (b) {
         if (c) {
             {
-                while( true )
-                    if (a)  b=1; else b=7; fi
-            }
+                while( true ){
+                    if (a) { 
+                        b=1
+                    }else{ 
+                        b=7;
+                    }
+                }
+            }   
         } 
-        
+      }
     }
 
 

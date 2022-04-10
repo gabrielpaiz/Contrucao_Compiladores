@@ -25,12 +25,21 @@ WHITE_SPACE_CHAR=[\n\r\ \t\b\012]
 "while"	 	{ return AsdrSample.WHILE; }
 "if"		{ return AsdrSample.IF; }
 "else"		{ return AsdrSample.ELSE; }
-"fi"		{ return AsdrSample.FI; }
+"==" { return AsdrSample.EQUALS; }
+"and" { return AsdrSample.AND; }
+"or" { return AsdrSample.OR; }
+"double" {return AsdrSample.DOUBLE;}
+"int" { return AsdrSample.INT; }
 
 [:jletter:][:jletterdigit:]* { return AsdrSample.IDENT; }  
 
-[0-9]+ 	{ return AsdrSample.NUM; }
+[0-9]+("."[0-9]+)? 	{ return AsdrSample.NUM; }
 
+">" |
+"<" |
+"*" |
+"/" |
+"-" |
 "{" |
 "}" |
 ";" |

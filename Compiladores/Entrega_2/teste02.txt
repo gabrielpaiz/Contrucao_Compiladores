@@ -1,4 +1,12 @@
 $TRACE_ON
-    { a = ((( 34 ))); }
+    int a;
+    double b;
+    { a = 34;
+      if (a > 2) {
+          a = 1;
+      }else{
+          b = 2.0;
+      }
+    }
 
 
