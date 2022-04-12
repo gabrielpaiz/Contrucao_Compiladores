@@ -14,10 +14,9 @@ int main (int argc, const char * argv[])
 	
 	starttime = omp_get_wtime(); 
 
-    // omp_set_num_threads(2);
+    omp_set_num_threads(4);
 	
-	#pragma omp parallel private ( i, j, k, prime, total )
-	#pragma omp for //schedule (dynamic)
+	#pragma omp parallel for schedule(dynamic) default(none) private(i, j, k, prime, total, intervalo)
 	
 	for (k = 1 ; k <= intervalo ; k++)
 	{ 
@@ -36,8 +35,9 @@ int main (int argc, const char * argv[])
 		        }
 		    total = total + prime;
 	    }
-	     
-	    // printf("O numero de primos do intervalo [1-%d] e %d\n", k, total);
+	    if(k%500==0){
+	    	printf("O numero de primos do intervalo [1-%d] e %d\n", k, total);
+		}
 	}
 	
 	stoptime = omp_get_wtime();
