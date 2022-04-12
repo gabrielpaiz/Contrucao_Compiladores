@@ -1,9 +1,8 @@
 $TRACE_ON
-    double b;
-    double a;
+    double a, b;
     { b = 3.0;
       a = 20.0;
-      while (b < a and b > 0){
+      while ((b < a) and (b > 0)){
           b = a - b;
       }
     }

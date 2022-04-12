@@ -4,9 +4,9 @@ $TRACE_ON
     { while (b) {
         if (c) {
             {
-                while( true ){
+                while( a == 4 or b < c ){
                     if (a) { 
-                        b=1
+                        b=1;
                     }else{ 
                         b=7;
                     }
