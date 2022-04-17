@@ -3,7 +3,7 @@ import math
 from numpy import append
 
 
-class knn:
+class KNN:
     n = 1
     conj_treino = []
 
@@ -18,28 +18,30 @@ class knn:
         
         return math.sqrt(ret)
 
-    def n_proximos(self, conj_y) -> list:
-        ls_proximos = []
-        ls_proximos.append((0,self.dist_euclidiana(self.conj_treino[0], conj_y)))
+    def n_proximos(self, y) -> list:
+        ls_vizinho = []
+        # ls_vizinho -> lista de n vizinhos
+        # ls_vizinhos adiciona uma lista de tuplas, sendo as tuplas -> (posição no conjunto treino, distancia euclidiana)
+        ls_vizinho.append((0,self.dist_euclidiana(self.conj_treino[0], y)))
 
+        # Percorre de 1 até o tamanho do treino
         for i in range(1,len(self.conj_treino)):
-            dist = self.dist_euclidiana(self.conj_treino[i], conj_y)
-            for j in range(len(ls_proximos)):
-                if dist < ls_proximos[j][1]:
-                    ls_proximos.insert(j, (i, dist))
-                if len(ls_proximos) > self.n:
-                    ls_proximos.pop()
+            #Calcula distancia entre o y e o conj_treino[i]
+            dist = self.dist_euclidiana(self.conj_treino[i], y)
+            #percorre de 0 até o tamnho da lista de n vizinhos mais proximos
+            for j in range(len(ls_vizinho)):
+                #Se a distancia encontrada for menor que alguma na lista atual. Insere na posição que achou a tupla com (i, distancia) I
+                if dist < ls_vizinho[j][1]:
+                    ls_vizinho.insert(j, (i, dist))
+                # Se o tamanho da lista ficar maior que o n, tira o ultimo
+                if len(ls_vizinho) > self.n:
+                    ls_vizinho.pop()
                     break
             
+        
         result = []
-        for set in ls_proximos:
+        # Apenas para retornar o set com todo o conteudo do treino
+        for set in ls_vizinho:
             result.append(self.conj_treino[set[0]])
 
         return result
-
-
-lista_treino = [(0,1), (2,2), (3,4), (4,1)]
-knn = knn(2, lista_treino)
-
-print(f'Vizinho mais próximo de {(3,3)}: {knn.n_proximos((3,3))}')
-print(f'Vizinho mais próximo de {(3,2)}: {knn.n_proximos((3,2))}')
