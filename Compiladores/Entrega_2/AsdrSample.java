@@ -102,10 +102,52 @@ public class AsdrSample {
       | E*E | E/E | E AND E         //   \/  maior precedencia, assoc a esqu
       | ident | num | (E)           // casos base 
 
-    E -> indetX | numX| (E)X
-    X -> <E| >E | ==E| -E | +E
-         |OR E | *E | /E |AND E 
-         | vazio
+   E -> EA > EA
+      | EA < EA
+      | EA == EA
+      | EA
+
+   EB -> EB * F
+      | EB / F
+      | EB AND F
+      | F
+
+
+   EA -> EA + EB
+      | EA - EB
+      | EA OR EB
+      | EB
+
+
+
+   E -> EA LE
+
+   RE -> == EA
+      | > EA
+      | < EA
+      | Vazio
+
+
+
+
+   EA -> EB LEA
+
+   LEA -> + EB
+       | - EB
+       | OR EB
+       | Vazio
+
+
+
+
+   EB -> F LEB
+
+   LEB -> * F
+       | / F
+       | AND F
+       | Vazio
+
+   F -> indet | num | (E)
     
     ***/
 
@@ -182,6 +224,8 @@ public class AsdrSample {
             System.out.println("Prog --> Bloco");
          ldecl();
          Bloco();
+      }else if(laToken == '{'){
+         Bloco();
       } else
          yyerror("esperado Uma lista de declarações");
    }
@@ -237,35 +281,135 @@ public class AsdrSample {
       }
    }
    
-//    E --> E > E | E < E | E == E    //   |   não associativo
-//    | E+E | E-E | E OR E          //   |   assoc a esquerda
-//    | E*E | E/E | E AND E         //   \/  maior precedencia, assoc a esqu
-//    | ident | num | (E)           // casos base 
+// E -> EA LE
 
-//  E -> indetX | numX| (E)X
-//  X -> <E| >E | ==E| -E | +E
-//       |OR E | *E | /E |AND E 
-//       | vazio
-   private void E() {
+//    RE -> == EA
+//       | > EA
+//       | < EA
+//       | Vazio
+
+
+
+
+//    EA -> EB LEA
+
+//    LEA -> + EB
+//        | - EB
+//        | OR EB
+//        | Vazio
+
+
+
+
+//    EB -> F LEB
+
+//    LEB -> * F
+//        | / F
+//        | AND F
+//        | Vazio
+
+//    F -> indet | num | (E)
+   private void F(){
       if (laToken == IDENT) {
          if (debug)
-            System.out.println("E --> IDENT");
+            System.out.println("F --> IDENT");
          verifica(IDENT);
-         X();
       } else if (laToken == NUM) {
          if (debug)
-            System.out.println("E --> NUM");
+            System.out.println("F --> NUM");
          verifica(NUM);
-         X();
       } else if (laToken == '(') {
          if (debug)
-            System.out.println("E --> ( E )");
+            System.out.println("F --> ( E )");
          verifica('(');
          E();
          verifica(')');
-         X();
       } else
          yyerror("Esperado operando (, identificador ou numero");
+   }
+
+   private void LEB(){
+      if (laToken == '*') {
+         if (debug)
+            System.out.println("LEB --> *");
+         verifica('*');
+         F();
+      } else if (laToken == '/') {
+         if (debug)
+            System.out.println("LEB --> /");
+         verifica('/');
+         F();
+      } else if (laToken == AND) {
+         if (debug)
+            System.out.println("LEB --> AND");
+         verifica(AND);
+         F();
+      }
+   }
+
+   private void EB(){
+      if(laToken == IDENT
+         | laToken == NUM
+         | laToken == '('){
+            F();
+            LEB();
+         }
+   }
+
+   private void LEA(){
+      if (laToken == '+') {
+         if (debug)
+            System.out.println("LEA --> +");
+         verifica('+');
+         EB();
+      } else if (laToken == '-') {
+         if (debug)
+            System.out.println("LEA --> -");
+         verifica('-');
+         EB();
+      } else if (laToken == OR) {
+         if (debug)
+            System.out.println("LEA --> OR");
+         verifica(OR);
+         EB();
+      }
+   }
+
+   private void EA(){
+      if(laToken == IDENT
+         | laToken == NUM
+         | laToken == '('){
+            EB();
+            LEA();
+         }
+   }
+
+   private void RE(){
+      if (laToken == EQUALS) {
+         if (debug)
+            System.out.println("RE --> ==");
+         verifica(EQUALS);
+         EA();
+      } else if (laToken == '>') {
+         if (debug)
+            System.out.println("RE --> >");
+         verifica('>');
+         EA();
+      } else if (laToken == '<') {
+         if (debug)
+            System.out.println("RE --> <");
+         verifica('<');
+         EA();
+      }
+   }
+
+   private void E() {
+      if(laToken == IDENT
+         | laToken == NUM
+         | laToken == '('){
+            EA();
+            RE();
+         }
    }
 
    private void X() {

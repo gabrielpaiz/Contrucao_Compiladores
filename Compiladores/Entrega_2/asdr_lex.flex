@@ -35,6 +35,7 @@ WHITE_SPACE_CHAR=[\n\r\ \t\b\012]
 
 [0-9]+("."[0-9]+)? 	{ return AsdrSample.NUM; }
 
+"," |
 ">" |
 "<" |
 "*" |
