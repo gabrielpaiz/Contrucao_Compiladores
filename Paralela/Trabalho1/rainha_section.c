@@ -35,46 +35,70 @@ void mostrarTabuleiro(int tab[line][colun], int N)
 int seguro(int tab[line][colun], int N, int lin, int col)
 {
 	int i, j;
-	int ret = 1;
-	for(i = 0; i < N; i++)
-	{
-		if(tab[lin][i] == 1)
-			ret = 0;
-	}
+	int tid;
+    int ret = 1;
+	omp_set_num_threads(4);	
+	#pragma omp parallel private(tid, i, j) reduction(&& : ret)
+    {
+	// verifica se ocorre ataque na linha
+        #pragma omp sections
+        {
+            tid = omp_get_thread_num();
+            #pragma omp section
+            {
+                //printf("Seção 1 - thread %d\n", tid);
+                for(i = 0; i < N; i++)
+                {
+                    if(tab[lin][i] == 1)
+                        ret = 0;
+                }
+                //printf("Seção 2 - thread %d\n", tid);
+                //verifica se ocorre ataque na coluna
+                for(i = 0; i < N; i++)
+                {
+                    if(tab[i][col] == 1)
+                        ret = 0;
+                }
+            }
 
-	//verifica se ocorre ataque na coluna
-	for(i = 0; i < N; i++)
-	{
-		if(tab[i][col] == 1)
-			ret = 0;
-	}
+            #pragma omp section
+            {
+                //printf("Seção 3 - thread %d\n", tid);
+                // verifica se ocorre ataque na diagonal principal
+                // acima e abaixo
+                for(i = lin, j = col; i >= 0 && j >= 0; i--, j--)
+                {
+                    if(tab[i][j] == 1)
+                        ret = 0;
+                }
+                //printf("Seção 4 - thread %d\n", tid);
+                for(i = lin, j = col; i < N && j < N; i++, j++)
+                {
+                    if(tab[i][j] == 1)
+                        ret = 0;
+                }
+            }
 
-	// verifica se ocorre ataque na diagonal principal
-	// acima e abaixo
-	for(i = lin, j = col; i >= 0 && j >= 0; i--, j--)
-	{
-		if(tab[i][j] == 1)
-			ret = 0;
-	}
-	for(i = lin, j = col; i < N && j < N; i++, j++)
-	{
-		if(tab[i][j] == 1)
-			ret = 0;
-	}
-
-	// verifica se ocorre ataque na diagonal secundária
-	// acima e abaixo
-	for(i = lin, j = col; i >= 0 && j < N; i--, j++)
-	{
-		if(tab[i][j] == 1)
-			ret = 0;
-	}
-	for(i = lin, j = col; i < N && j >= 0; i++, j--)
-	{
-		if(tab[i][j] == 1)
-			ret = 0;
-	}
-
+            #pragma omp section
+            {
+                //printf("Seção 5 - thread %d\n", tid);
+                // verifica se ocorre ataque na diagonal secundária
+                // acima e abaixo
+                for(i = lin, j = col; i >= 0 && j < N; i--, j++)
+                {
+                    if(tab[i][j] == 1)
+                        ret = 0;
+                }
+          
+                //printf("Seção 6 - thread %d\n", tid);
+                for(i = lin, j = col; i < N && j >= 0; i++, j--)
+                {
+                    if(tab[i][j] == 1)
+                        ret = 0;
+                }
+            }
+        }
+    }
 	// se chegou aqui, então está seguro (retorna true)
 	return ret;
 }
@@ -133,7 +157,7 @@ void executar_rec(int tab[line][colun], int N, int col)
 int main(int argc, char *argv[])
 {
 	// número de rainhas
-	int N = 8;
+	int N = 12;
 	double starttime, stoptime;
 	// tabuleiro (matriz)
 	int tab[line][colun];
