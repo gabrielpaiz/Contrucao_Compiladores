@@ -78,10 +78,10 @@ int seguro(int ** tab, int N, int lin, int col)
 	função que resolve o problema
 	retorna true se conseguiu resolver e false caso contrário
 */
-int executar(int N)
+int executar(int N, int trd)
 {
 	int sol;
-	omp_set_num_threads(4);
+	omp_set_num_threads(trd);
 	#pragma omp parallel for schedule(dynamic) reduction(+:sol)
 	for(int i = 0; i < N; i++)
 	{
@@ -139,12 +139,13 @@ int main(int argc, char *argv[])
 {
 	// número de rainhas
 	int N = atoi(argv[1]);
+	int threads = atoi(argv[2]);
 	int sol;
 	double starttime, stoptime;
 
 	starttime = omp_get_wtime(); 
 	// imprime todas as soluções
-	sol = executar(N);
+	sol = executar(N, threads);
 	stoptime = omp_get_wtime();
 
 	// imprime a quantidade de soluções

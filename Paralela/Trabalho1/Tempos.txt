@@ -4,8 +4,9 @@ Section:
 2 - Deu maior
 
 Paralela dynamic
-1 - 16 rainhas: 2390.61 -> 14772512 solucoes
-2 - 16 rainhas: 1264.72 -> 14771027 solucoes!
+1 - 16 rainhas: 2390.61 -> 14772512 solucoes!
+
+4 - 16 rainhas: 783.99 -> 14772512 solução!
 
 
 Seq
