@@ -133,7 +133,7 @@ void executar_rec(int tab[line][colun], int N, int col)
 int main(int argc, char *argv[])
 {
 	// número de rainhas
-	int N = 8;
+	int N = 14;
 	double starttime, stoptime;
 	// tabuleiro (matriz)
 	int tab[line][colun];

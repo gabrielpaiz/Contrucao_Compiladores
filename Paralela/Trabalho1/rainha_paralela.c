@@ -8,13 +8,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// conta a quantidade de soluções
-int sol = 0;
-int line = 16;
-int colun = 16;
-
 // função para mostrar o tabuleiro
-void mostrarTabuleiro(int tab[line][colun], int N)
+void mostrarTabuleiro(int ** tab, int N)
 {
 	for(int i = 0; i < N; i++)
 	{
@@ -32,7 +27,7 @@ void mostrarTabuleiro(int tab[line][colun], int N)
 
 // verifica se é seguro colocar a rainha numa determinada coluna
 // isso poderia ser feito com menos código, mas assim ficou mais didático
-int seguro(int tab[line][colun], int N, int lin, int col)
+int seguro(int ** tab, int N, int lin, int col)
 {
 	int i, j;
 	int ret = 1;
@@ -83,52 +78,44 @@ int seguro(int tab[line][colun], int N, int lin, int col)
 	função que resolve o problema
 	retorna true se conseguiu resolver e false caso contrário
 */
-void executar(int N, int col)
+int executar(int N)
 {
-
-    omp_set_num_threads(1);	
-    #pragma omp parallel for schedule(dynamic)
+	int sol;
+	omp_set_num_threads(4);
+	#pragma omp parallel for schedule(dynamic) reduction(+:sol)
 	for(int i = 0; i < N; i++)
 	{
-		int tab[line][colun];
-
-		for(int i = 0; i < N; i++)
-		{
-			for(int j = 0; j < N; j++)
-				tab[i][j] = 0;
-		}
-
-        printf("Começou o for thread: %d\n", omp_get_thread_num());
-		// verifica se é seguro colocar a rainha naquela coluna
+		int **tab = (int**) malloc(N  * sizeof(int *));
+		for(int i = 0; i < N; ++i)
+        	tab[i] = (int*) malloc(N  * sizeof(int));
 		
-		//mostrarTabuleiro(tab, N);
-		if(seguro(tab, N, i, col))
-		{
+		for(int i = 0; i < N; i++)
+        	for(int j = 0; j < N; j++)
+		    	tab[i][j] = 0;
+
+		// verifica se é seguro colocar a rainha naquela coluna
 			// insere a rainha (marca com 1)
-			tab[i][col] = 1;
+		tab[i][0] = 1;
 
-			// chamada recursiva
-			executar_rec(tab, N, col + 1);
+		// chamada recursiva
+		sol += executar_rec(tab, N, 1);
 
-			// remove a rainha (backtracking)
-			tab[i][col] = 0;
-			//printf("Acabou a Folha %d do BackTraking!\n", i);
-		}
+		// remove a rainha (backtracking)
+		tab[i][0] = 0;
+		printf("Acabou a Folha %d do BackTraking!\n", i);
 	}
-
-    return;
+	return sol;
 }
 
-void executar_rec(int tab[line][colun], int N, int col)
+int executar_rec(int ** tab, int N, int col)
 {
 	if(col == N)
 	{
 		//printf("Solucao %d:\n\n", sol + 1);
 		//mostrarTabuleiro(tab, N);
-		sol++;
-		return;
+		return 1;
 	}
-
+	int sol = 0;
 	for(int i = 0; i < N; i++)
 	{
 		// verifica se é seguro colocar a rainha naquela coluna
@@ -138,33 +125,26 @@ void executar_rec(int tab[line][colun], int N, int col)
 			tab[i][col] = 1;
 
 			// chamada recursiva
-			executar_rec(tab, N, col + 1);
+			sol += executar_rec(tab, N, col + 1);
 
 			// remove a rainha (backtracking)
 			tab[i][col] = 0;
 		}
 	}
+
+	return sol;
 }
 
 int main(int argc, char *argv[])
 {
 	// número de rainhas
-	int N = 16;
+	int N = atoi(argv[1]);
+	int sol;
 	double starttime, stoptime;
-	// tabuleiro (matriz)
-	// int tab[line][colun];
-
-	// // inserindo todas as linhas
-	// for(int i = 0; i < N; i++)
-	// {
-    //     for(int j = 0; j < N; j++)
-	// 	    tab[i][j] = 0;
-	// }
 
 	starttime = omp_get_wtime(); 
 	// imprime todas as soluções
-	//executar(tab, N, 0);
-	executar(N, 0);
+	sol = executar(N);
 	stoptime = omp_get_wtime();
 
 	// imprime a quantidade de soluções
