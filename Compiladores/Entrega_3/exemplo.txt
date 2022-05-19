@@ -1,0 +1,10 @@
+int a;
+
+public void main(){
+    if(a < b){
+        a = b;
+    }else{
+        b = a;
+    }
+}
+

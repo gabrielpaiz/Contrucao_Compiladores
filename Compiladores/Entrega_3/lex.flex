@@ -12,6 +12,7 @@
   }
 %}
 
+
 NL  = \n | \r | \r\n
 
 %%
@@ -33,6 +34,7 @@ private|public {return Parser.FUNCT;}
 
 [0-9]+ { return Parser.NUM;}
 [a-zA-Z][a-zA-Z0-9]* { return Parser.IDENT;}
+
 ">" |
 "<" |
 "," |

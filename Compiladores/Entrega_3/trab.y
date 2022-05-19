@@ -12,7 +12,7 @@
 
 %%
  
-Prog :  Decl ListaFuncoes
+Prog : Decl ListaFuncoes
     ;
 
 Decl : Tipo LId ';' Decl
@@ -66,21 +66,30 @@ Cmd : Bloco
     ;
 
 restoIF: ELSE Cmd
-       |      //vazio
+       | Cmd
        ;
 
-E : E '=' E
-  | E '+' E
-  | E '-' E
-  | E '*' E 
-  | E '/' E
-  | E '>' E
-  | E '<' E
-  | E 'AND' E
-  | E 'OR' E
-  | NUM
+E : F EA
+  ;
+
+EA: OP F
+  | //vazio
+  ;
+
+F: NUM
   | IDENT restoIDENT
   | '(' E ')'
+  ;
+
+OP: '='
+  | '+'
+  | '-'
+  | '*'
+  | '/'
+  | '<'
+  | '>'
+  | AND
+  | OR
   ;
 
 restoIDENT: '(' listaExp ')'
