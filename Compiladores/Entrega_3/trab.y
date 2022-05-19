@@ -10,6 +10,7 @@
 %left '+' '-'
 %left '*' '/'
 
+
 %%
  
 Prog : Decl ListaFuncoes
@@ -46,7 +47,7 @@ tipoOuVoid: VOID
           | Tipo
           ;
 
-ListaParametros: Tipo IDENT restoListaParametros
+ListaParametros: Tipo restoListaParametros
                ;
 restoListaParametros: IDENT
                     | IDENT "," ListaParametros
@@ -60,20 +61,20 @@ LCmd : Cmd LCmd
      ;
 
 Cmd : Bloco
-    | IF '(' E ')' restoIF
+    | IF '(' E ')' Cmd restoIF
     | WHILE '(' E ')' Cmd
     | E ';'
     ;
 
 restoIF: ELSE Cmd
-       | Cmd
+       | //vazio
        ;
 
 E : F EA
   ;
 
-EA: OP F
-  | //vazio
+EA: OP E
+  |  //vazio
   ;
 
 F: NUM

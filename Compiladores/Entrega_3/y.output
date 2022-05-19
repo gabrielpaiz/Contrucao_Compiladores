@@ -25,7 +25,7 @@
   15  tipoOuVoid : VOID
   16             | Tipo
 
-  17  ListaParametros : Tipo IDENT restoListaParametros
+  17  ListaParametros : Tipo restoListaParametros
 
   18  restoListaParametros : IDENT
   19                       | IDENT ',' ListaParametros
@@ -36,16 +36,16 @@
   22       |
 
   23  Cmd : Bloco
-  24      | IF '(' E ')' restoIF
+  24      | IF '(' E ')' Cmd restoIF
   25      | WHILE '(' E ')' Cmd
   26      | E ';'
 
   27  restoIF : ELSE Cmd
-  28          | Cmd
+  28          |
 
   29  E : F EA
 
-  30  EA : OP F
+  30  EA : OP E
   31     |
 
   32  F : NUM
@@ -276,16 +276,18 @@ state 24
 
 
 state 25
-	ListaParametros : Tipo . IDENT restoListaParametros  (17)
+	ListaParametros : Tipo . restoListaParametros  (17)
 
 	IDENT  shift 29
 	.  error
+
+	restoListaParametros  goto 30
 
 
 state 26
 	restoUmaFuncao : '(' ListaParametros . ')' Bloco  (14)
 
-	')'  shift 30
+	')'  shift 31
 	.  error
 
 
@@ -293,19 +295,19 @@ state 27
 	Bloco : '{' . LCmd '}'  (20)
 	LCmd : .  (22)
 
-	IDENT  shift 31
-	NUM  shift 32
-	IF  shift 33
-	WHILE  shift 34
-	'('  shift 35
+	IDENT  shift 32
+	NUM  shift 33
+	IF  shift 34
+	WHILE  shift 35
+	'('  shift 36
 	'{'  shift 27
 	'}'  reduce 22
 
-	Bloco  goto 36
-	LCmd  goto 37
-	Cmd  goto 38
-	E  goto 39
-	F  goto 40
+	Bloco  goto 37
+	LCmd  goto 38
+	Cmd  goto 39
+	E  goto 40
+	F  goto 41
 
 
 state 28
@@ -315,15 +317,20 @@ state 28
 
 
 state 29
-	ListaParametros : Tipo IDENT . restoListaParametros  (17)
+	restoListaParametros : IDENT .  (18)
+	restoListaParametros : IDENT . ',' ListaParametros  (19)
 
-	IDENT  shift 41
-	.  error
-
-	restoListaParametros  goto 42
+	','  shift 42
+	')'  reduce 18
 
 
 state 30
+	ListaParametros : Tipo restoListaParametros .  (17)
+
+	.  reduce 17
+
+
+state 31
 	restoUmaFuncao : '(' ListaParametros ')' . Bloco  (14)
 
 	'{'  shift 27
@@ -332,7 +339,7 @@ state 30
 	Bloco  goto 43
 
 
-state 31
+state 32
 	F : IDENT . restoIDENT  (33)
 	restoIDENT : .  (46)
 
@@ -353,78 +360,78 @@ state 31
 	restoIDENT  goto 45
 
 
-state 32
+state 33
 	F : NUM .  (32)
 
 	.  reduce 32
 
 
-state 33
-	Cmd : IF . '(' E ')' restoIF  (24)
+state 34
+	Cmd : IF . '(' E ')' Cmd restoIF  (24)
 
 	'('  shift 46
 	.  error
 
 
-state 34
+state 35
 	Cmd : WHILE . '(' E ')' Cmd  (25)
 
 	'('  shift 47
 	.  error
 
 
-state 35
+state 36
 	F : '(' . E ')'  (34)
 
-	IDENT  shift 31
-	NUM  shift 32
-	'('  shift 35
+	IDENT  shift 32
+	NUM  shift 33
+	'('  shift 36
 	.  error
 
 	E  goto 48
-	F  goto 40
+	F  goto 41
 
 
-state 36
+state 37
 	Cmd : Bloco .  (23)
 
 	.  reduce 23
 
 
-state 37
+state 38
 	Bloco : '{' LCmd . '}'  (20)
 
 	'}'  shift 49
 	.  error
 
 
-state 38
+state 39
 	LCmd : Cmd . LCmd  (21)
 	LCmd : .  (22)
 
-	IDENT  shift 31
-	NUM  shift 32
-	IF  shift 33
-	WHILE  shift 34
-	'('  shift 35
+	IDENT  shift 32
+	NUM  shift 33
+	IF  shift 34
+	WHILE  shift 35
+	'('  shift 36
 	'{'  shift 27
 	'}'  reduce 22
 
-	Bloco  goto 36
+	Bloco  goto 37
 	LCmd  goto 50
-	Cmd  goto 38
-	E  goto 39
-	F  goto 40
+	Cmd  goto 39
+	E  goto 40
+	F  goto 41
 
 
-state 39
+state 40
 	Cmd : E . ';'  (26)
 
 	';'  shift 51
 	.  error
 
 
-state 40
+state 41
 	E : F . EA  (29)
 	EA : .  (31)
 
@@ -445,18 +452,16 @@ state 40
 	OP  goto 62
 
 
-state 41
-	restoListaParametros : IDENT .  (18)
-	restoListaParametros : IDENT . ',' ListaParametros  (19)
-
-	','  shift 63
-	')'  reduce 18
-
-
 state 42
-	ListaParametros : Tipo IDENT restoListaParametros .  (17)
+	restoListaParametros : IDENT ',' . ListaParametros  (19)
 
-	.  reduce 17
+	INT  shift 1
+	DOUBLE  shift 2
+	BOOLEAN  shift 3
+	.  error
+
+	Tipo  goto 25
+	ListaParametros  goto 63
 
 
 state 43
@@ -469,14 +474,14 @@ state 44
 	restoIDENT : '(' . listaExp ')'  (44)
 	restoIDENT : '(' . ')'  (45)
 
-	IDENT  shift 31
-	NUM  shift 32
-	'('  shift 35
+	IDENT  shift 32
+	NUM  shift 33
+	'('  shift 36
 	')'  shift 64
 	.  error
 
 	E  goto 65
-	F  goto 40
+	F  goto 41
 	listaExp  goto 66
 
 
@@ -487,27 +492,27 @@ state 45
 
 
 state 46
-	Cmd : IF '(' . E ')' restoIF  (24)
+	Cmd : IF '(' . E ')' Cmd restoIF  (24)
 
-	IDENT  shift 31
-	NUM  shift 32
-	'('  shift 35
+	IDENT  shift 32
+	NUM  shift 33
+	'('  shift 36
 	.  error
 
 	E  goto 67
-	F  goto 40
+	F  goto 41
 
 
 state 47
 	Cmd : WHILE '(' . E ')' Cmd  (25)
 
-	IDENT  shift 31
-	NUM  shift 32
-	'('  shift 35
+	IDENT  shift 32
+	NUM  shift 33
+	'('  shift 36
 	.  error
 
 	E  goto 68
-	F  goto 40
+	F  goto 41
 
 
 state 48
@@ -596,26 +601,21 @@ state 61
 
 
 state 62
-	EA : OP . F  (30)
+	EA : OP . E  (30)
 
-	IDENT  shift 31
-	NUM  shift 32
-	'('  shift 35
+	IDENT  shift 32
+	NUM  shift 33
+	'('  shift 36
 	.  error
 
-	F  goto 70
+	E  goto 70
+	F  goto 41
 
 
 state 63
-	restoListaParametros : IDENT ',' . ListaParametros  (19)
+	restoListaParametros : IDENT ',' ListaParametros .  (19)
 
-	INT  shift 1
-	DOUBLE  shift 2
-	BOOLEAN  shift 3
-	.  error
-
-	Tipo  goto 25
-	ListaParametros  goto 71
+	.  reduce 19
 
 
 state 64
@@ -628,30 +628,30 @@ state 65
 	listaExp : E . restoListaEXP  (47)
 	restoListaEXP : .  (49)
 
-	','  shift 72
+	','  shift 71
 	')'  reduce 49
 
-	restoListaEXP  goto 73
+	restoListaEXP  goto 72
 
 
 state 66
 	restoIDENT : '(' listaExp . ')'  (44)
 
-	')'  shift 74
+	')'  shift 73
 	.  error
 
 
 state 67
-	Cmd : IF '(' E . ')' restoIF  (24)
+	Cmd : IF '(' E . ')' Cmd restoIF  (24)
 
-	')'  shift 75
+	')'  shift 74
 	.  error
 
 
 state 68
 	Cmd : WHILE '(' E . ')' Cmd  (25)
 
-	')'  shift 76
+	')'  shift 75
 	.  error
 
 
@@ -662,124 +662,130 @@ state 69
 
 
 state 70
-	EA : OP F .  (30)
+	EA : OP E .  (30)
 
 	.  reduce 30
 
 
 state 71
-	restoListaParametros : IDENT ',' ListaParametros .  (19)
-
-	.  reduce 19
-
-
-state 72
 	restoListaEXP : ',' . listaExp  (48)
 
-	IDENT  shift 31
-	NUM  shift 32
-	'('  shift 35
+	IDENT  shift 32
+	NUM  shift 33
+	'('  shift 36
 	.  error
 
 	E  goto 65
-	F  goto 40
-	listaExp  goto 77
+	F  goto 41
+	listaExp  goto 76
 
 
-state 73
+state 72
 	listaExp : E restoListaEXP .  (47)
 
 	.  reduce 47
 
 
-state 74
+state 73
 	restoIDENT : '(' listaExp ')' .  (44)
 
 	.  reduce 44
 
 
-state 75
-	Cmd : IF '(' E ')' . restoIF  (24)
+state 74
+	Cmd : IF '(' E ')' . Cmd restoIF  (24)
 
-	IDENT  shift 31
-	NUM  shift 32
-	IF  shift 33
-	ELSE  shift 78
-	WHILE  shift 34
-	'('  shift 35
+	IDENT  shift 32
+	NUM  shift 33
+	IF  shift 34
+	WHILE  shift 35
+	'('  shift 36
 	'{'  shift 27
 	.  error
 
-	Bloco  goto 36
-	Cmd  goto 79
-	E  goto 39
-	restoIF  goto 80
-	F  goto 40
+	Bloco  goto 37
+	Cmd  goto 77
+	E  goto 40
+	F  goto 41
+
+
+state 75
+	Cmd : WHILE '(' E ')' . Cmd  (25)
+
+	IDENT  shift 32
+	NUM  shift 33
+	IF  shift 34
+	WHILE  shift 35
+	'('  shift 36
+	'{'  shift 27
+	.  error
+
+	Bloco  goto 37
+	Cmd  goto 78
+	E  goto 40
+	F  goto 41
 
 
 state 76
-	Cmd : WHILE '(' E ')' . Cmd  (25)
-
-	IDENT  shift 31
-	NUM  shift 32
-	IF  shift 33
-	WHILE  shift 34
-	'('  shift 35
-	'{'  shift 27
-	.  error
-
-	Bloco  goto 36
-	Cmd  goto 81
-	E  goto 39
-	F  goto 40
-
-
-state 77
 	restoListaEXP : ',' listaExp .  (48)
 
 	.  reduce 48
 
 
+77: shift/reduce conflict (shift 79, reduce 28) on ELSE
+state 77
+	Cmd : IF '(' E ')' Cmd . restoIF  (24)
+	restoIF : .  (28)
+
+	ELSE  shift 79
+	IDENT  reduce 28
+	NUM  reduce 28
+	IF  reduce 28
+	WHILE  reduce 28
+	'('  reduce 28
+	'{'  reduce 28
+	'}'  reduce 28
+
+	restoIF  goto 80
+
+
 state 78
-	restoIF : ELSE . Cmd  (27)
-
-	IDENT  shift 31
-	NUM  shift 32
-	IF  shift 33
-	WHILE  shift 34
-	'('  shift 35
-	'{'  shift 27
-	.  error
-
-	Bloco  goto 36
-	Cmd  goto 82
-	E  goto 39
-	F  goto 40
-
-
-state 79
-	restoIF : Cmd .  (28)
-
-	.  reduce 28
-
-
-state 80
-	Cmd : IF '(' E ')' restoIF .  (24)
-
-	.  reduce 24
-
-
-state 81
 	Cmd : WHILE '(' E ')' Cmd .  (25)
 
 	.  reduce 25
 
 
-state 82
+state 79
+	restoIF : ELSE . Cmd  (27)
+
+	IDENT  shift 32
+	NUM  shift 33
+	IF  shift 34
+	WHILE  shift 35
+	'('  shift 36
+	'{'  shift 27
+	.  error
+
+	Bloco  goto 37
+	Cmd  goto 81
+	E  goto 40
+	F  goto 41
+
+
+state 80
+	Cmd : IF '(' E ')' Cmd restoIF .  (24)
+
+	.  reduce 24
+
+
+state 81
 	restoIF : ELSE Cmd .  (27)
 
 	.  reduce 27
 
 
+State 77 contains 1 shift/reduce conflict.
+
+
 27 terminals, 23 nonterminals
-50 grammar rules, 83 states
+50 grammar rules, 82 states
