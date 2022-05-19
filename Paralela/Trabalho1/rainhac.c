@@ -10,11 +10,9 @@
 
 // conta a quantidade de soluções
 int sol = 0;
-int line = 50;
-int colun = 50;
 
 // função para mostrar o tabuleiro
-void mostrarTabuleiro(int tab[line][colun], int N)
+void mostrarTabuleiro(int ** tab, int N)
 {
 	for(int i = 0; i < N; i++)
 	{
@@ -32,7 +30,7 @@ void mostrarTabuleiro(int tab[line][colun], int N)
 
 // verifica se é seguro colocar a rainha numa determinada coluna
 // isso poderia ser feito com menos código, mas assim ficou mais didático
-int seguro(int tab[line][colun], int N, int lin, int col)
+int seguro(int ** tab, int N, int lin, int col)
 {
 	int i, j;
 	int ret = 1;
@@ -83,27 +81,7 @@ int seguro(int tab[line][colun], int N, int lin, int col)
 	função que resolve o problema
 	retorna true se conseguiu resolver e false caso contrário
 */
-void executar(int tab[line][colun], int N, int col)
-{
-	for(int i = 0; i < N; i++)
-	{
-		// verifica se é seguro colocar a rainha naquela coluna
-		if(seguro(tab, N, i, col))
-		{
-			// insere a rainha (marca com 1)
-			tab[i][col] = 1;
-
-			// chamada recursiva
-			executar_rec(tab, N, col + 1);
-
-			// remove a rainha (backtracking)
-			tab[i][col] = 0;
-			printf("Acabou a Folha %d do BackTraking!\n", i);
-		}
-	}
-}
-
-void executar_rec(int tab[line][colun], int N, int col)
+void executar(int ** tab, int N, int col)
 {
 	if(col == N)
 	{
@@ -115,14 +93,16 @@ void executar_rec(int tab[line][colun], int N, int col)
 
 	for(int i = 0; i < N; i++)
 	{
-		// verifica se é seguro colocar a rainha naquela coluna
+		if(col == 0){
+			printf("Start %d:\n\n", i);
+		}// verifica se é seguro colocar a rainha naquela coluna
 		if(seguro(tab, N, i, col))
 		{
 			// insere a rainha (marca com 1)
 			tab[i][col] = 1;
 
 			// chamada recursiva
-			executar_rec(tab, N, col + 1);
+			executar(tab, N, col + 1);
 
 			// remove a rainha (backtracking)
 			tab[i][col] = 0;
@@ -130,20 +110,20 @@ void executar_rec(int tab[line][colun], int N, int col)
 	}
 }
 
+
 int main(int argc, char *argv[])
 {
 	// número de rainhas
-	int N = 14;
+	int N = atoi(argv[1]);
 	double starttime, stoptime;
 	// tabuleiro (matriz)
-	int tab[line][colun];
-
-	// inserindo todas as linhas
-	for(int i = 0; i < N; i++)
-	{
-        for(int j = 0; j < N; j++)
-		    tab[i][j] = 0;
-	}
+	int **tab = (int**) malloc(N  * sizeof(int *));
+		for(int i = 0; i < N; ++i)
+        	tab[i] = (int*) malloc(N  * sizeof(int));
+		
+		for(int i = 0; i < N; i++)
+        	for(int j = 0; j < N; j++)
+		    	tab[i][j] = 0;
 
 	starttime = omp_get_wtime(); 
 	// imprime todas as soluções

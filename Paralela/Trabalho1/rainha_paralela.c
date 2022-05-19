@@ -82,7 +82,7 @@ int executar(int N, int trd)
 {
 	int sol;
 	omp_set_num_threads(trd);
-	#pragma omp parallel for schedule(dynamic) reduction(+:sol)
+	#pragma omp parallel for schedule(dynamic, 2) reduction(+:sol)
 	for(int i = 0; i < N; i++)
 	{
 		int **tab = (int**) malloc(N  * sizeof(int *));
@@ -102,7 +102,7 @@ int executar(int N, int trd)
 
 		// remove a rainha (backtracking)
 		tab[i][0] = 0;
-		printf("Acabou a Folha %d do BackTraking!\n", i);
+		//printf("Acabou a Folha %d do BackTraking!\n", i);
 	}
 	return sol;
 }

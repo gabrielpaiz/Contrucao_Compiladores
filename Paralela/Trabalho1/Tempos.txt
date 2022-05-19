@@ -1,21 +1,15 @@
-Sequencial 16 rainhas: 697.20 segundos
-
-Section:
-2 - Deu maior
-
-Paralela dynamic
-1 - 16 rainhas: 2390.61 -> 14772512 solucoes!
-
-4 - 16 rainhas: 783.99 -> 14772512 solução!
+Tempos Lad 1 execução:
+resultado Esperado -> 14772512 solucoes!
 
 
-Seq
-10 - 724 - 0.05
-12 - 14200 - 1.26
-14 - 365596 - 51.80
+Seq -> 5723.33 segundos
 
-
-Paralela
-10  - 724 - 0.02
-12 - 14200 - 0.39
-14 - 365596 - 15.23
+Para - -> 2 : 2862.92 segundos
+     | 
+     | -> 4 : 1462.09 segundos
+     |
+     | -> 6 : 1127.67 segundos
+     |
+     | -> 8 : 824.59 segundos  Ultimos Modulos fisicos
+     |
+     | -> 16 : 641.31 segundos Maximo com HyperThreading

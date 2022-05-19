@@ -1,0 +1,54 @@
+//  Gramática 
+
+Prog --> Decl  ListaFuncoes                
+
+Decl --> Tipo LId ';'  Decl
+     |     //produção vazia                        
+
+Tipo --> int 
+       | double 
+       | boolean              
+
+LId -->  LId ',' IDENT
+       | IDENT       
+
+ListaFuncoes --> umaFuncao ListaFuncoes
+               |  umaFuncao                      
+
+umaFuncao --> FUNCT tipoOuVoid IDENT () Bloco
+           | FUNCT tipoOuVoid IDENT ( ListaParametros ) Bloco    
+  
+tipoOuVoid --> VOID 
+             | Tipo
+  
+ListaParametros --> Tipo IDENT 
+                  | Tipo IDENT , ListaParametros      
+
+Bloco -->  '{' LCmd '}'            
+
+LCmd -->  Cmd LCmdo             
+       |     //produçãoo vazia
+
+Cmd --> Bloco
+       | if ( E ) Cmd
+       | if ( E ) Cmd else Cmd
+       | while ( E ) Cmd
+       |  E  ;           
+
+E --> E = E        
+     | E + E
+     | E - E   
+     | E * E   
+     | E / E   
+     | E > E   
+     | E < E    
+     | E AND E   
+     |  E OR E   
+     | NUM
+     | IDENT
+     | IDENT ( listaExp )   
+     | IDENT ()       
+     | ( E )               
+   
+ listaExp --> E  
+            | E , listaExp
