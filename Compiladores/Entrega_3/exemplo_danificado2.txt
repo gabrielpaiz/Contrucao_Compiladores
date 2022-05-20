@@ -1,0 +1,19 @@
+int a;
+double b;
+boolean c;
+
+public void test(){
+    if(a < b){
+        a = b + c;
+    }else{
+        a = a * c;
+    }
+}
+
+public boolean test3(boolean, boolean){
+    test();
+    a = a * test2(k);
+    if(p && k){
+        b = a;
+    }
+}

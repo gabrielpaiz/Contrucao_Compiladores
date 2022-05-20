@@ -1,0 +1,25 @@
+public void test(){
+    if(a < b){
+        a = b + c;
+    }else{
+        a = a * c;
+    }
+}
+
+int a;
+double b;
+
+private int test2(boolean aux){
+    while(aux || c){
+        c = b < 10;
+        b = b - 1;
+    }
+}
+
+public boolean test3(boolean k, boolean p){
+    test();
+    a = a * test2(k);
+    if(p && k){
+        b = a;
+    }
+}

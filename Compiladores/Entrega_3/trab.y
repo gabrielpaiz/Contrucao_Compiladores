@@ -6,10 +6,12 @@
 %token INT, DOUBLE, BOOLEAN, VOID, IDENT, NUM, FUNCT, IF, ELSE, WHILE, AND, OR
 
 %right '='
-%left '<' '>' AND OR
+%left AND OR
+%left '<' '>' 
 %left '+' '-'
 %left '*' '/'
-
+%nonassoc THEN
+%nonassoc ELSE
 
 %%
  
@@ -67,7 +69,7 @@ Cmd : Bloco
     ;
 
 restoIF: ELSE Cmd
-       | //vazio
+       | //vazio %prec THEN
        ;
 
 E : F EA

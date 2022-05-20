@@ -168,6 +168,7 @@ public final static short ELSE=265;
 public final static short WHILE=266;
 public final static short AND=267;
 public final static short OR=268;
+public final static short THEN=269;
 public final static short YYERRCODE=256;
 final static short yylhs[] = {                           -1,
     0,    1,    1,    3,    3,    3,    4,    4,    2,    6,
@@ -290,7 +291,7 @@ yycheck = new short[] {                         41,
 };
 }
 final static short YYFINAL=4;
-final static short YYMAXTOKEN=268;
+final static short YYMAXTOKEN=269;
 final static String yyname[] = {
 "end-of-file",null,null,null,null,null,null,null,null,null,null,null,null,null,
 null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,
@@ -309,7 +310,7 @@ null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,
 null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,
 null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,
 null,null,null,null,null,null,null,"INT","DOUBLE","BOOLEAN","VOID","IDENT",
-"NUM","FUNCT","IF","ELSE","WHILE","AND","OR",
+"NUM","FUNCT","IF","ELSE","WHILE","AND","OR","THEN",
 };
 final static String yyrule[] = {
 "$accept : Prog",
@@ -364,7 +365,7 @@ final static String yyrule[] = {
 "restoListaEXP :",
 };
 
-//#line 110 "trab.y"
+//#line 112 "trab.y"
 
   private Yylex lexer;
 
@@ -423,7 +424,7 @@ final static String yyrule[] = {
   //  }
   }
 
-//#line 355 "Parser.java"
+//#line 356 "Parser.java"
 //###############################################################
 // method: yylexdebug : check lexer state
 //###############################################################
