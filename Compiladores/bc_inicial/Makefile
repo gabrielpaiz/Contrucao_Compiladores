@@ -2,12 +2,12 @@
 # byacc/j from http://troi.lincom-asg.com/~rjamison/byacc/
 
 JFLEX  = jflex 
-BYACCJ = byaccj -tv -J
+BYACCJ = ./yacc.linux -tv -J
 JAVAC  = javac
 
 # targets:
 
-all: Parser.class
+all: Parser.class AppTeste.class
 
 run: Parser.class
 	java Parser
@@ -17,11 +17,16 @@ build: clean Parser.class
 clean:
 	rm -f *~ *.class *.o *.s Yylex.java Parser.java y.output
 
-Parser.class: Yylex.java Parser.java
+
+AppTeste.class: Yylex.java Parser.java *.java
+	$(JAVAC) AppTeste.java
+
+
+Parser.class: Yylex.java Parser.java *.java
 	$(JAVAC) Parser.java
 
-Yylex.java: lexico.flex
-	$(JFLEX) lexico.flex
+Yylex.java: calc.flex
+	$(JFLEX) calc.flex
 
-Parser.java: exerc.y Yylex.java
-	$(BYACCJ) exerc.y
+Parser.java: calc.y
+	$(BYACCJ) calc.y
