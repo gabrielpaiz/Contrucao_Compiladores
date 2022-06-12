@@ -1,7 +1,12 @@
+/*
+ * Integrantes:
+ *  - Gabriel Bonatto Justo 17104118-9 gabriel.justo@acad.pucrs.br
+ *  - Niccolas Guntzel Maganeli 16201269-4 niccolas.maganeli@edu.pucrs.br
+ */
+
 %%
 
 %byaccj
-%line
 
 %{
   private Parser yyparser;
@@ -10,18 +15,24 @@
     this(r);
     this.yyparser = yyparser;
   }
-
-  public int GetLine() { return yyline + 1; }
-
-  public String GetText(){ return yytext();}
 %}
 
 NUM = [:digit:]+ ("." [:digit:]+)?
 IDENT = [:letter:]+ ([:letter:]|[:digit:])*
-BOOL = "true"|"false"
 NL  = \n | \r | \r\n
 
 %%
+
+"==" { return Parser.EQUALS; }
+"!=" { return Parser.DIFF; }
+">=" { return Parser.GE; }
+"<=" { return Parser.LE; }
+"&&" { return Parser.AND; }
+"||" { return Parser.OR; }
+"+=" { return Parser.PLUS_EQ; }
+"*=" { return Parser.TIMES_EQ; }
+"++" { return Parser.PLUS_PLUS; }
+"--" { return Parser.MINUS_MINUS; }
 
 /* operators */
 ";" | 
@@ -36,46 +47,29 @@ NL  = \n | \r | \r\n
 ")" |
 "<" |
 ">" |
-"!" | 
+"#" |
+"!" |
 "," |
 "="   { return (int) yycharat(0); }
- 
+
+define { return Parser.DEFINE; }
+for { return Parser.FOR; }
 if  { return Parser.IF; }
 else  { return Parser.ELSE; }
 while  { return Parser.WHILE; }
 print  { return Parser.PRINT; }
-for  { return Parser.FOR; }
-define  { return Parser.DEFINE; }
-return  { return Parser.RETURN; }
-print  {return Parser.PRINT;}
-
-">=" {return Parser.MAIOR_IGUAL;}
-"<=" {return Parser.MENOR_IGUAL;}
-"==" {return Parser.IGUAL;}
-"!=" {return Parser.DIFF;}
-
-"+=" {return Parser.SOMA_ATR;}
-"*=" {return Parser.MULT_ATR;}
-
-#help {return Parser.HELP;}
-#show {return Parser.SHOW;}
-#show_all {return Parser.SHOW_ALL;}
-
-"&&" {return Parser.AND;}
-"||" {return Parser.OR;} 
-
-
+help { return Parser.HELP; }
+show_all { return Parser.SHOW_ALL; }
+show { return Parser.SHOW; }
+return { return Parser.RETURN; }
 
 {NL}   { return Parser.NL; }
 
 {NUM}  { yyparser.yylval = new ParserVal(Double.parseDouble(yytext()));
          return Parser.NUM; }
-{BOOL} { yyparser.yylval = new ParserVal(Boolean.parseBoolean(yytext()));
-         return Parser.BOOL;}
 
 {IDENT} { yyparser.yylval = new ParserVal(yytext());
          return Parser.IDENT; }
-
 
 [ \t]+ { }
 

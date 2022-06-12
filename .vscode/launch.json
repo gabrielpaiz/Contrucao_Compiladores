@@ -5,10 +5,25 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python: Módulo",
-            "type": "python",
+            "type": "java",
+            "name": "Launch Current File",
             "request": "launch",
-            "program": "Machine_Learning/T1/main.py",
+            "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "Launch AppTeste",
+            "request": "launch",
+            "mainClass": "AppTeste",
+            "projectName": "Semestre_22-1_88fb816f"
+        },
+        {
+            "type": "java",
+            "name": "Launch Parser",
+            "request": "launch",
+            "mainClass": "Parser",
+            "args": "Compiladores/bc_inicial/teste.txt",
+            "projectName": "Semestre_22-1_88fb816f"
         }
     ]
 }

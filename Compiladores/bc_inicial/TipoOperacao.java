@@ -12,5 +12,19 @@ public enum TipoOperacao
     IFELSE,	
     WHILE,
     SEQ, 
-    NULL
+    NULL,
+    RETURN,
+    FOR,
+    PRINT,
+    DEFINE,
+    SOMA_ATRIB,
+    MULT_ATRIB,
+    GREAT,
+    GREAT_EQ,
+    LESS_EQ,
+    DIFF,
+    EQUAL,
+    AND,
+    OR,
+    NEG
 }
