@@ -1,0 +1,19 @@
+int a; 
+int b; 
+int c;
+
+void main() {  
+    b = 5;
+    c = 3;
+    a = 0;
+    while(a<10){
+        b  = b + a;
+        a++;
+    }
+
+    write (" a (1)=  ", a );
+    write (" b (3)=  ", b );
+    write (" c (14)=  ", c );
+
+}
+

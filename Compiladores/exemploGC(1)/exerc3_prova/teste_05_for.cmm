@@ -1,0 +1,14 @@
+int a; 
+int b; 
+int c;
+
+void main() { 
+    b = 5;
+    for(a = 0; a < 10; a++){
+        b = b + a;
+    }
+    write (" a (10)=  ", a );
+    write (" b (50)=  ", b );
+
+}
+

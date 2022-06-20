@@ -1,0 +1,30 @@
+int i, j, k, a;
+
+double x, y;
+
+bool b, ok;
+
+funct int soma( int i, int b) int x; { x = i + k; }
+
+funct void main() {
+    y = j + y;
+
+    i = soma(a + i, j);
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

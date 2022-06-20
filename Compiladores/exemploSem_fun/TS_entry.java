@@ -1,0 +1,92 @@
+import java.util.ArrayList;
+/**
+ * Write a description of class Paciente here.
+ * 
+ * @author (your name) 
+ * @version (a version number or a date)
+ */
+public class TS_entry
+{
+   private String id;
+   private ClasseID classe;  
+   private TS_entry tipo;
+
+   private TabSimb locais;
+   private TabSimb params;
+
+
+   // construtor para arrays
+   public TS_entry(String umId, TS_entry umTipo, ClasseID umaClasse) {
+        id = umId;
+        tipo = umTipo;
+        classe = umaClasse;
+        locais = new TabSimb();
+        params = new TabSimb();
+   }
+
+
+   public String getId() {
+       return id; 
+   }
+
+   public TS_entry getTipo() {
+       return tipo; 
+   }
+
+    public ClasseID getClasse() {
+        return classe; 
+    }
+
+   public TabSimb getLocais(){
+        return locais;
+   }
+
+   public TabSimb getParams(){
+    return params;
+    }
+
+   public void insert_local(TS_entry local){
+        locais.insert(local);
+   }
+
+   public void insert_param(TS_entry param){
+        params.insert(param);
+    }
+   
+    
+   public String toString() {
+       StringBuilder aux = new StringBuilder("");
+        
+       aux.append("Id: ");
+       aux.append(String.format("%-10s", id));
+
+       aux.append("\tClasse: ");
+       aux.append(classe);
+       aux.append("\tTipo: "); 
+       aux.append(tipo2str(this.tipo)); 
+       
+      return aux.toString();
+
+   }
+
+  public String getTipoStr() {
+       return tipo2str(this); 
+   }
+
+    public String tipo2str(TS_entry tipo) {
+      if (tipo == null)  return "null"; 
+      else if (tipo==Parser.Tp_INT)    return "int"; 
+      else if (tipo==Parser.Tp_BOOL)   return "boolean"; 
+      else if (tipo==Parser.Tp_DOUBLE)  return "double";
+      else if (tipo==Parser.Tp_VOID)  return "void";
+      else if (tipo==Parser.Tp_ERRO)  return  "_erro_";
+      else                             return "erro/tp";
+   }
+
+}
+
+
+
+
+
+
