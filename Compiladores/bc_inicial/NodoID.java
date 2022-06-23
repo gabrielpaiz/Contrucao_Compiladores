@@ -7,7 +7,7 @@
  */
 public class NodoID implements INodo
 {
-private int tipo;
+    private int tipo;
     private String sval;
     
 
@@ -16,8 +16,9 @@ private int tipo;
     }
 
     public ResultValue avalia() {
-         if (Parser.memory.containsKey(sval))
-            return new ResultValue(Parser.memory.get(sval).getDouble());
+
+         if (Parser.peekStack().containsKey(sval))
+            return new ResultValue(Parser.peekStack().get(sval).getDouble());
          else 
             return new ResultValue(0);              
     }

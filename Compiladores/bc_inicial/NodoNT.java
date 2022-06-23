@@ -5,7 +5,7 @@ public class NodoNT implements INodo
 {
     private TipoOperacao op;
     private INodo subE, subD;
-    private INodo expr;
+    private INodo expr, cmd;
     private String ident;
 
     public NodoNT(TipoOperacao op, INodo se, INodo sd) {
@@ -26,15 +26,23 @@ public class NodoNT implements INodo
         subD = caseF;
         expr = exp;
     }
+
+    public NodoNT(TipoOperacao op, INodo var, INodo cond, INodo exp, INodo cmd){
+        this.op = op;
+        subE = var;
+        subD = cond;
+        expr = exp;
+        this.cmd = cmd;
+    }
    
     public ResultValue avalia() {
-
+        HashMap<String, ResultValue> memory = Parser.peekStack();
         ResultValue result = null;
         ResultValue  left, right, expressao;
         
-        if (op == TipoOperacao.NULL)
-           return null; 
-
+        if (op == TipoOperacao.NULL){
+            return null; 
+        }
         if (op == TipoOperacao.UMINUS) 
              result = new ResultValue(-1.0 * subE.avalia().getDouble()) ;
         
@@ -43,20 +51,24 @@ public class NodoNT implements INodo
         
         else if (op == TipoOperacao.ATRIB) {
              result = subE.avalia();
-             Parser.memory.put(ident, subE.avalia()); 
-             result = null;   
+             memory.put(ident, result);  
+             Parser.popStack();
+             Parser.pushStack(memory);
              //System.out.printf("sube: %s, %s <- %f\n", subE, ident, result.getDouble());         
         }
         else if (op == TipoOperacao.SOMA_ATRIB) {
-            result = new ResultValue(Parser.memory.get(ident).getDouble() + subE.avalia().getDouble());
-            Parser.memory.put(ident, result);
-            result = null;    
+            result = new ResultValue(memory.get(ident).getDouble() + subE.avalia().getDouble());
+            memory.put(ident, result);
+            Parser.popStack();
+            Parser.pushStack(memory);    
             //System.out.printf("sube: %s, %s <- %f\n", subE, ident, result.getDouble());         
        }
        else if (op == TipoOperacao.MULT_ATRIB) { 
-        result = new ResultValue(Parser.memory.get(ident).getDouble() * subE.avalia().getDouble());
-        Parser.memory.put(ident, result);    
-        result = null;
+        
+        result = new ResultValue(memory.get(ident).getDouble() * subE.avalia().getDouble());
+        memory.put(ident, result);    
+        Parser.popStack();
+        Parser.pushStack(memory);
         //System.out.printf("sube: %s, %s <- %f\n", subE, ident, result.getDouble());         
         }
 
@@ -67,7 +79,8 @@ public class NodoNT implements INodo
             }
       }
       else if (op == TipoOperacao.PRINT) {
-        System.out.println("Print -> "+subE.avalia());  
+        if(subE != null)
+            System.out.println("Print -> "+subE.avalia());  
       }
 
         else if (op == TipoOperacao.IFELSE) {
@@ -90,14 +103,19 @@ public class NodoNT implements INodo
            subE.avalia();
            result = subD.avalia();
         }
-        else if (op == TipoOperacao.RETURN) {
-            result = new ResultValue(-1.0);
-        }
-        else if (op == TipoOperacao.DEFINE) {
-            result = new ResultValue(-1.0);
-        }
         else if (op == TipoOperacao.FOR) {
-            result = new ResultValue(-1.0);
+            // this.op = op;
+            // subE = var;
+            // subD = cond;
+            // expr = exp;
+            // this.cmd = cmd;
+            result = subE.avalia();
+            expressao = subD.avalia();
+            while(expressao.getBool()){
+                result = cmd.avalia();
+                expr.avalia();
+                expressao = subD.avalia();
+            }
         }
 
         else {        
@@ -147,7 +165,6 @@ public class NodoNT implements INodo
               result = new ResultValue(0);
             }
         }
-        
         return result;               
     }
     

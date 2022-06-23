@@ -8,6 +8,7 @@
 public class ResultValue
 {
     private TypeEnum type;
+    
     private double dval;
     private boolean bval;
     
@@ -15,8 +16,8 @@ public class ResultValue
         type = TypeEnum.DOUBLE;
         dval = val;
     }
-
-     public ResultValue(boolean val){
+    
+    public ResultValue(boolean val){
         type = TypeEnum.BOOLEAN;
         bval = val;
     }
@@ -28,7 +29,11 @@ public class ResultValue
     public boolean getBool() {
         return bval;
     }
-
+    
+    public TypeEnum getType() {
+        return type;
+    }
+    
     public String toString() {
         switch (type) {
             case DOUBLE:

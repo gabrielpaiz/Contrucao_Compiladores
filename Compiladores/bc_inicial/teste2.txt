@@ -1,0 +1,4 @@
+i= 0;
+define a(b, c){b +=c; return b;}
+print(a(4,i));
+#show_all
