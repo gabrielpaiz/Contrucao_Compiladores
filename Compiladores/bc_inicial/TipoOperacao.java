@@ -26,5 +26,6 @@ public enum TipoOperacao
     EQUAL,
     AND,
     OR,
-    NEG
+    NEG,
+    FUNC
 }

@@ -46,7 +46,7 @@ input:   /* empty string */ {$$=null;}
       
 line:    NL      { if (interactive) System.out.print("\n> "); $$ = null; }
        | exp NL  { $$ = $1;
-		   System.out.println("\n= " + $1); 
+		   if (interactive) System.out.println("\n= " + $1); 
                    if (interactive) System.out.print("\n>: "); }
        | cmd NL
        ;
@@ -110,15 +110,7 @@ exp:     NUM                { $$ = new NodoTDouble($1); }
                                   else if(actualParam.size() > currParam.size())
                                       yyerror("Parametros a mais na função "+$1+"()");
                                   else{
-                                      ResultValue result = funcs.get($1).executa(actualParam);
-                                      if(result.getType() == TypeEnum.DOUBLE)
-                                        $$ = new NodoTDouble(result.getDouble());
-                                      else if(result.getType() == TypeEnum.BOOLEAN)
-                                        $$ = new NodoTBool(result.getBool());
-                                      else{
-                                        yyerror("Resultado invalido da função "+$1+"()");
-                                        $$ = new NodoNT(TipoOperacao.NULL, null, null, null);;
-                                        }
+                                      $$ = new NodoNT(TipoOperacao.FUNC, $1);
                                   }
                                 }
                                 erro = true;
@@ -129,8 +121,8 @@ valParams: lparam
       |
       ;
 
-lparam : exp  {actualParam.add( ((INodo)$1).avalia() );}
-      | lparam ',' exp {actualParam.add( ((INodo)$3).avalia() );}
+lparam : exp  {actualParam.add( ((INodo)$1) );}
+      | lparam ',' exp {actualParam.add( ((INodo)$3) );}
       ;
 
 
@@ -141,7 +133,7 @@ lparam : exp  {actualParam.add( ((INodo)$1).avalia() );}
 
   public static Stack<HashMap<String, ResultValue>> scopo = new Stack<>();
 
-  public ArrayList<ResultValue> actualParam;
+  public static ArrayList<INodo> actualParam;
   public ArrayList<String> currParam;
   public ResultValue avalia;
   public boolean erro = true;
@@ -237,7 +229,7 @@ lparam : exp  {actualParam.add( ((INodo)$1).avalia() );}
       }
       if(funcs.size() > 0){
         System.out.println("Funções:");
-        scopo.peek().forEach((key, value) -> {
+        funcs.forEach((key, value) -> {
           String parameters = "";
           for(int i = 0; i< funcs.get(key).getParams().size(); i++){
             parameters += funcs.get(key).getParams().get(i) + ',';

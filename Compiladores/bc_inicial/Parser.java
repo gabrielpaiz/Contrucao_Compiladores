@@ -521,7 +521,7 @@ final static String yyrule[] = {
 "lparam : lparam ',' exp",
 };
 
-//#line 137 "calc.y"
+//#line 129 "calc.y"
 
 
   public static HashMap<String, ResultValue> memory = new HashMap<>();
@@ -529,7 +529,7 @@ final static String yyrule[] = {
 
   public static Stack<HashMap<String, ResultValue>> scopo = new Stack<>();
 
-  public ArrayList<ResultValue> actualParam;
+  public static ArrayList<INodo> actualParam;
   public ArrayList<String> currParam;
   public ResultValue avalia;
   public boolean erro = true;
@@ -846,7 +846,7 @@ break;
 case 5:
 //#line 48 "calc.y"
 { yyval.obj = val_peek(1).obj;
-		   System.out.println("\n= " + val_peek(1).obj); 
+		   if (interactive) System.out.println("\n= " + val_peek(1).obj); 
                    if (interactive) System.out.print("\n>: "); }
 break;
 case 9:
@@ -1016,29 +1016,21 @@ case 48:
                                   else if(actualParam.size() > currParam.size())
                                       yyerror("Parametros a mais na função "+val_peek(4).sval+"()");
                                   else{
-                                      ResultValue result = funcs.get(val_peek(4).sval).executa(actualParam);
-                                      if(result.getType() == TypeEnum.DOUBLE)
-                                        yyval.obj = new NodoTDouble(result.getDouble());
-                                      else if(result.getType() == TypeEnum.BOOLEAN)
-                                        yyval.obj = new NodoTBool(result.getBool());
-                                      else{
-                                        yyerror("Resultado invalido da função "+val_peek(4).sval+"()");
-                                        yyval.obj = new NodoNT(TipoOperacao.NULL, null, null, null);;
-                                        }
+                                      yyval.obj = new NodoNT(TipoOperacao.FUNC, val_peek(4).sval);
                                   }
                                 }
                                 erro = true;
                               }
 break;
 case 51:
-//#line 132 "calc.y"
-{actualParam.add( ((INodo)val_peek(0).obj).avalia() );}
+//#line 124 "calc.y"
+{actualParam.add( ((INodo)val_peek(0).obj) );}
 break;
 case 52:
-//#line 133 "calc.y"
-{actualParam.add( ((INodo)val_peek(0).obj).avalia() );}
+//#line 125 "calc.y"
+{actualParam.add( ((INodo)val_peek(0).obj) );}
 break;
-//#line 965 "Parser.java"
+//#line 957 "Parser.java"
 //########## END OF USER-SUPPLIED ACTIONS ##########
     }//switch
     //#### Now let's reduce... ####

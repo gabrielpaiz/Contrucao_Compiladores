@@ -34,6 +34,11 @@ public class NodoNT implements INodo
         expr = exp;
         this.cmd = cmd;
     }
+
+    public NodoNT(TipoOperacao op, String ident){
+        this.op = op;
+        this.ident = ident;
+    }
    
     public ResultValue avalia() {
         HashMap<String, ResultValue> memory = Parser.peekStack();
@@ -98,6 +103,9 @@ public class NodoNT implements INodo
                 result = subE.avalia();
                 expressao = expr.avalia();
             }
+        }
+        else if (op == TipoOperacao.FUNC) {
+            result = Parser.funcs.get(ident).avalia();
         }
        else if (op == TipoOperacao.SEQ) {
            subE.avalia();
