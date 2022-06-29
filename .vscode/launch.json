@@ -22,7 +22,7 @@
             "name": "Launch Parser",
             "request": "launch",
             "mainClass": "Parser",
-            "args": "Compiladores/bc_inicial/teste.txt",
+            "args": "Compiladores/bc_inicial/teste2.txt",
             "projectName": "Semestre_22-1_88fb816f"
         }
     ]
