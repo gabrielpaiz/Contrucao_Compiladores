@@ -42,11 +42,13 @@ void interleaving(int vetor[], int tam, int *vetor_auxiliar){
         }
 }
 
+
 int main(int argc, char **argv){
     int my_rank, max_rank;
     int VETOR_SIZE = atoi(argv[1]);
     int vetor[VETOR_SIZE];
     int brk, left_higher = 0;
+    int start, end;
 
     MPI_Init(&argc, &argv);
     MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
@@ -61,7 +63,9 @@ int main(int argc, char **argv){
     int vetor_temp[troca*2];
     for(int i =0;i<new_SIZE;i++)
 	    new_vet[i] = vetor[new_SIZE*my_rank+i];
-
+    if(my_rank == 0){
+        start = MPI_Wtime();
+    }
     while(1){
         bs(new_SIZE, new_vet);
  
@@ -104,12 +108,9 @@ int main(int argc, char **argv){
     }
     MPI_Finalize();
     
-
-    #ifdef DEBUG
-    printf("\nVetor: ");
-    for (int i=0 ; i<new_SIZE; i++)                              /* print sorted array */
-        printf("[%03d] ", new_vet[i]);
-    #endif
-    printf("\n");
+    if(my_rank == 0){
+        end = MPI_Wtime();
+        printf("%d,%d", max_rank, end-start);
+    }
     return 0;
 }
