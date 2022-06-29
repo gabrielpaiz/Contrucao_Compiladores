@@ -42,6 +42,15 @@ void interleaving(int vetor[], int tam, int *vetor_auxiliar){
         }
 }
 
+int isOrd(int * vet, int size){
+    for(int i = 0; i< size-1;i++){
+        if(vet[i] > vet[i+1]){
+            return 0;
+        }
+    }
+    return 1;
+}
+
 
 int main(int argc, char **argv){
     int my_rank, max_rank;
@@ -106,11 +115,24 @@ int main(int argc, char **argv){
         if(my_rank != 0)
      	    MPI_Recv(&new_vet, troca, MPI_INT, my_rank -1, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
     }
+
+    if(my_rank != 0){
+        MPI_Send(new_vet, new_SIZE, MPI_INT, 0, 0, MPI_COMM_WORLD);
+    }else{
+        for(int i = 1; i<max_rank;i++){
+            MPI_Recv(&vetor[new_SIZE*i], new_SIZE, i, MPI_ANY_TAG, MPI_COMM_WORLD, &status)
+        }
+    }
+
     MPI_Finalize();
     
     if(my_rank == 0){
-        end = MPI_Wtime();
-        printf("%d,%d", max_rank, end-start);
+        if(isOrd(vetor, VETOR_SIZE)){
+            end = MPI_Wtime();
+            printf("%d,%d,%d", VETOR_SIZE,max_rank, end-start);
+        }else{
+            printf("Não deu certo =,(\n")
+        }
     }
     return 0;
 }
